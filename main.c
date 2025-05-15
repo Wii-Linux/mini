@@ -30,7 +30,31 @@ Copyright (C) 2009		John Kelley <wiidev@kelley.ca>
 #include "boot2.h"
 #include "git_version.h"
 
-#define PPC_BOOT_FILE "/bootmii/ppcboot.elf"
+// (1st choice, neagix's PPC-side boot menu)
+#define GUMBOOT_ELF_FILE     "/gumboot/gumboot.elf"
+// (2nd choice, BootMii GUI (neagix's default path))
+#define BOOTMII_GUI_ELF_FILE "/bootmii/gui.elf"
+// (3rd choice, BootMii GUI (official BootMii path))
+#define PPCBOOT_ELF_FILE     "/bootmii/ppcboot.elf"
+
+// 'MBTM' - Memory BooT Magic
+#define MEMBOOT_MAGIC 0x424D4D54
+
+// pointer to magic
+#define MEMBOOT_MAGIC_PTR  (*(u32 *)0xFFFFF0)
+
+// size, set by Broadway on load
+#define MEMBOOT_SIZE_PTR   (*(u32 *)0xFFFFF4)
+
+// reserved params
+#define MEMBOOT_RSRVD1_PTR (*(u32 *)0xFFFFF8)
+#define MEMBOOT_RSRVD2_PTR (*(u32 *)0xFFFFF8)
+
+// static pointer to where the ELF should live, *could* make this configurable,
+// but the RAM size is so small anyways that it's not like there's really much of a
+// choice on where it could go in the first place...
+#define MEMBOOT_ELF_ADDR   ((u8 *)0x1000000)
+
 
 FATFS fatfs;
 
@@ -73,34 +97,62 @@ u32 _main(void *base)
 	gecko_printf("Initializing IPC...\n");
 	ipc_initialize();
 
-	gecko_printf("Initializing SDHC...\n");
-	sdhc_init();
-
-	gecko_printf("Mounting SD...\n");
-	fres = f_mount(0, &fatfs);
-
 	if (read32(0x0d800190) & 2) {
 		gecko_printf("GameCube compatibility mode detected...\n");
 		vector = boot2_run(1, 0x101);
 		goto shutdown;
 	}
 
+	if (MEMBOOT_MAGIC_PTR == MEMBOOT_MAGIC) {
+		gecko_printf("Detected memboot magic, skipping SD init\n");
+		goto memboot;
+	}
+
+	gecko_printf("Initializing SDHC...\n");
+	sdhc_init();
+
+	gecko_printf("Mounting SD...\n");
+	fres = f_mount(0, &fatfs);
+
 	if(fres != FR_OK) {
 		gecko_printf("Error %d while trying to mount SD\n", fres);
 		panic2(0, PANIC_MOUNT);
 	}
 
-	gecko_printf("Trying to boot:" PPC_BOOT_FILE "\n");
+	gecko_printf("Trying to boot: " GUMBOOT_ELF_FILE "\n");
+	res = powerpc_boot_file(GUMBOOT_ELF_FILE);
+	if (!res)
+		goto success;
 
-	res = powerpc_boot_file(PPC_BOOT_FILE);
-	if(res < 0) {
-		gecko_printf("Failed to boot PPC: %d\n", res);
-		gecko_printf("Booting System Menu\n");
-		vector = boot2_run(1, 2);
-		goto shutdown;
-	}
+	gecko_printf("Failed to boot PPC " GUMBOOT_ELF_FILE ": %d\n", res);
+	gecko_printf("Trying to boot: " BOOTMII_GUI_ELF_FILE "\n");
+	res = powerpc_boot_file(BOOTMII_GUI_ELF_FILE);
+	if (!res)
+		goto success;
 
-	gecko_printf("Going into IPC mainloop...\n");
+	gecko_printf("Failed to boot PPC " BOOTMII_GUI_ELF_FILE ": %d\n", res);
+	gecko_printf("Trying to boot: " PPCBOOT_ELF_FILE "\n");
+	res = powerpc_boot_file(PPCBOOT_ELF_FILE);
+	if (!res)
+		goto success;
+
+	gecko_printf("Failed to boot PPC " PPCBOOT_ELF_FILE ": %d\n", res);
+
+memboot:
+	// try to memboot, even we don't have the magic, just in case
+	// (it almost certainly won't work, but never know...)
+	gecko_printf("Trying to memboot: %p (%d bytes)\n", MEMBOOT_ELF_ADDR, MEMBOOT_SIZE_PTR);
+	res = powerpc_boot_mem(MEMBOOT_ELF_ADDR, MEMBOOT_SIZE_PTR);
+	if (!res)
+		goto success;
+
+	// last resort
+	gecko_printf("All boot options failed... booting System Menu\n");
+	vector = boot2_run(1, 2);
+	goto shutdown;
+
+success:
+	gecko_printf("Boot success - going into IPC mainloop...\n");
 	vector = ipc_process_slow();
 	gecko_printf("IPC mainloop done!\n");
 	gecko_printf("Shutting down IPC...\n");
