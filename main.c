@@ -38,7 +38,7 @@ Copyright (C) 2009		John Kelley <wiidev@kelley.ca>
 #define PPCBOOT_ELF_FILE     "/bootmii/ppcboot.elf"
 
 // 'MBTM' - Memory BooT Magic
-#define MEMBOOT_MAGIC 0x424D4D54
+#define MEMBOOT_MAGIC 0x4D42544D
 
 // pointer to magic
 #define MEMBOOT_MAGIC_PTR  (*(u32 *)0xFFFFF0)
