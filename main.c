@@ -48,7 +48,7 @@ Copyright (C) 2009		John Kelley <wiidev@kelley.ca>
 
 // reserved params
 #define MEMBOOT_RSRVD1_PTR (*(u32 *)0xFFFFF8)
-#define MEMBOOT_RSRVD2_PTR (*(u32 *)0xFFFFF8)
+#define MEMBOOT_RSRVD2_PTR (*(u32 *)0xFFFFFC)
 
 // static pointer to where the ELF should live, *could* make this configurable,
 // but the RAM size is so small anyways that it's not like there's really much of a
