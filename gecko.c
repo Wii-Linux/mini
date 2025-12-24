@@ -269,13 +269,14 @@ static u32 _gecko_receive_left = 0;
 static u32 _gecko_receive_len = 0;
 static u8 *_gecko_receive_buffer = NULL;
 
+#ifdef CAN_HAZ_GECKO_IN
 void gecko_process(void) {
 	u8 b;
 
 	if (!gecko_found)
 		return;
 
-#if 0
+#ifdef CAN_HAZ_IRQ
 	if (_gecko_cmd_start_time && read32(HW_TIMER) >
 			(_gecko_cmd_start_time + IRQ_ALARM_MS2REG(5000)))
 		goto cleanup;
@@ -383,6 +384,7 @@ cleanup:
 	_gecko_cmd_start_time = 0;
 	_gecko_state = GECKO_STATE_NONE;
 }
+#endif
 
 #endif
 

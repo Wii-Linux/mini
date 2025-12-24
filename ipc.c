@@ -349,7 +349,9 @@ u32 ipc_process_slow(void)
 
 		if (!vector)
 		{
+#ifdef CAN_HAZ_GECKO_IN
 			gecko_process();
+#endif
 
 #ifdef CAN_HAZ_IRQ
 			u32 cookie = irq_kill();

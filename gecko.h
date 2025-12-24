@@ -27,13 +27,17 @@ u8 gecko_enable_console(const u8 enable);
 int gecko_printf(const char *fmt, ...) __attribute__((format (printf, 1, 2)));
 #endif
 
+#ifdef CAN_HAZ_GECKO_IN
 void gecko_process(void);
+#endif
 
 #else
 #define gecko_init(...) do { } while(0)
 #define gecko_enable_console(...) do { } while(0)
 #define gecko_printf(...) do { } while(0)
+#ifdef CAN_HAZ_GECKO_IN
 #define gecko_process(...) do { } while(0)
+#endif
 #define gecko_timer(...) do { } while(0)
 #endif
 
