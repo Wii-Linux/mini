@@ -61,6 +61,7 @@ static volatile int irq_flag;
 static u32 last_page_read = 0;
 static u32 nand_min_page = 0x200; // default to protecting boot1+boot2
 
+#ifdef CAN_HAZ_IRQ
 void nand_irq(void)
 {
 	int code, tag, err = 0;
@@ -108,6 +109,7 @@ void nand_irq(void)
 	}
 	irq_flag = 1;
 }
+#endif
 
 void __nand_wait(void) {
 	while(read32(NAND_CMD) & NAND_BUSY_MASK);
@@ -192,6 +194,7 @@ void nand_read_page(u32 pageno, void *data, void *ecc) {
 }
 
 void nand_wait(void) {
+#ifdef CAN_HAZ_IRQ
 // power-saving IRQ wait
 	while(!irq_flag) {
 		u32 cookie = irq_kill();
@@ -199,6 +202,9 @@ void nand_wait(void) {
 			irq_wait();
 		irq_restore(cookie);
 	}
+#else
+	__nand_wait();
+#endif
 }
 
 #ifdef NAND_SUPPORT_WRITE
@@ -244,7 +250,9 @@ void nand_initialize(void)
 {
 	current_request.code = 0;
 	nand_reset();
+#ifdef CAN_HAZ_IRQ
 	irq_enable(IRQ_NAND);
+#endif
 }
 
 int nand_correct(u32 pageno, void *data, void *ecc)

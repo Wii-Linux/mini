@@ -8,6 +8,8 @@ Copyright (C) 2008, 2009	Hector Martin "marcan" <marcan@marcansoft.com>
 # see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 */
 
+#ifdef CAN_HAZ_IRQ
+
 #include "hollywood.h"
 #include "irq.h"
 
@@ -52,3 +54,4 @@ irq_restore:
 	msr		cpsr_c, r1
 	bx		lr
 
+#endif

@@ -78,6 +78,7 @@ u32 _main(void *base)
 	gecko_printf("          %08x %08x %08x\n",
 		read32(0xffffff0c), read32(0xffffff10), read32(0xffffff14));
 
+#ifdef CAN_HAZ_IRQ
 	irq_initialize();
 //	irq_enable(IRQ_GPIO1B);
 	irq_enable(IRQ_GPIO1);
@@ -85,6 +86,7 @@ u32 _main(void *base)
 	irq_enable(IRQ_TIMER);
 	irq_set_alarm(20, 1);
 	gecko_printf("Interrupts initialized\n");
+#endif
 
 	crypto_initialize();
 	gecko_printf("crypto support initialized\n");
@@ -159,8 +161,10 @@ success:
 	ipc_shutdown();
 
 shutdown:
+#ifdef CAN_HAZ_IRQ
 	gecko_printf("Shutting down interrupts...\n");
 	irq_shutdown();
+#endif
 	gecko_printf("Shutting down caches and MMU...\n");
 	mem_shutdown();
 

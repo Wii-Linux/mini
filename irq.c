@@ -10,6 +10,7 @@ Copyright (C) 2009			Andre Heider "dhewg" <dhewg@wiibrew.org>
 # see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 */
 
+#ifdef CAN_HAZ_IRQ
 #include "irq.h"
 #include "hollywood.h"
 #include "gecko.h"
@@ -119,3 +120,4 @@ void irq_set_alarm(u32 ms, u8 enable)
 		write32(HW_ALARM, read32(HW_TIMER) + _alarm_frequency);
 }
 
+#endif
