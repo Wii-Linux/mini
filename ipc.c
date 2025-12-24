@@ -290,6 +290,7 @@ static void process_in(void)
 	}
 }
 
+#ifdef CAN_HAZ_IRQ
 void ipc_irq(void)
 {
 	int donebell = 0;
@@ -305,6 +306,7 @@ void ipc_irq(void)
 	if(!donebell)
 		gecko_printf("IPC: IRQ but no bell!\n");
 }
+#endif
 
 void ipc_initialize(void)
 {
@@ -316,7 +318,9 @@ void ipc_initialize(void)
 	slow_queue_tail = 0;
 	in_head = 0;
 	out_tail = 0;
+#ifdef CAN_HAZ_IRQ
 	irq_enable(IRQ_IPC);
+#endif
 	write32(HW_IPC_ARMCTRL, IPC_CTRL_IRQ_IN);
 }
 
@@ -328,7 +332,9 @@ void ipc_shutdown(void)
 	// Do kill flags so Nintendo's SDK doesn't get confused
 	write32(HW_IPC_PPCCTRL, IPC_CTRL_RESET);
 	write32(HW_IPC_ARMCTRL, IPC_CTRL_RESET);
+#if CAN_HAZ_IRQ
 	irq_disable(IRQ_IPC);
+#endif
 }
 
 u32 ipc_process_slow(void)
@@ -345,10 +351,22 @@ u32 ipc_process_slow(void)
 		{
 			gecko_process();
 
+#ifdef CAN_HAZ_IRQ
 			u32 cookie = irq_kill();
 			if(slow_queue_head == slow_queue_tail)
 				irq_wait();
 			irq_restore(cookie);
+#else
+			/* do everything important that ipc_irq would've done */
+			while(read32(HW_IPC_ARMCTRL) & IPC_CTRL_IN) {
+				write32(HW_IPC_ARMCTRL, IPC_CTRL_IRQ_IN | IPC_CTRL_IN);
+				while(peek_intail() != in_head) {
+					process_in();
+					in_head = (in_head+1)&(IPC_IN_SIZE-1);
+					poke_inhead(in_head);
+				}
+			}
+#endif
 		}
 	}
 	return vector;

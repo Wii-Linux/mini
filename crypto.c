@@ -46,7 +46,9 @@ void crypto_initialize(void)
 	crypto_read_seeprom();
 	write32(AES_CMD, 0);
 	while (read32(AES_CMD) != 0);
+#ifdef CAN_HAZ_IRQ
 	irq_enable(IRQ_AES);
+#endif
 }
 
 void crypto_ipc(volatile ipc_request *req)
@@ -70,10 +72,13 @@ void crypto_ipc(volatile ipc_request *req)
 
 static int _aes_irq = 0;
 
+#ifdef CAN_HAZ_IRQ
 void aes_irq(void)
 {
 	_aes_irq = 1;
 }
+#endif
+
 
 static inline void aes_command(u16 cmd, u8 iv_keep, u32 blocks)
 {

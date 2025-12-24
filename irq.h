@@ -70,6 +70,7 @@ void irq_set_alarm(u32 ms, u8 enable);
 #endif
 
 #else
+#include "types.h"
 // stub functions allow us to avoid sprinkling other code with ifdefs
 static inline u32 irq_kill(void) {
 	return 0;

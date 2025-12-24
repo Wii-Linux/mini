@@ -39,7 +39,11 @@ _start:
 	ldr	pc, =v_instr_abrt
 	ldr	pc, =v_data_abrt
 	ldr	pc, =v_reserved
+#ifdef CAN_HAZ_IRQ
 	ldr	pc, =v_irq
+#else
+	ldr	pc, =v_reserved
+#endif
 	ldr	pc, =v_fiq
 
 .pool

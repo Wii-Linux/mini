@@ -275,9 +275,11 @@ void gecko_process(void) {
 	if (!gecko_found)
 		return;
 
+#if 0
 	if (_gecko_cmd_start_time && read32(HW_TIMER) >
 			(_gecko_cmd_start_time + IRQ_ALARM_MS2REG(5000)))
 		goto cleanup;
+#endif
 
 	switch (_gecko_state) {
 	case GECKO_STATE_NONE:
