@@ -90,6 +90,7 @@ static u32 _gecko_checksend(void)
 }
 #endif
 
+#ifdef CAN_HAZ_GECKO_IN
 static u32 _gecko_checkrecv(void)
 {
 	u32 i = 0;
@@ -98,6 +99,7 @@ static u32 _gecko_checkrecv(void)
 		return 1; // Return 1 if safe to recv
 	return 0;
 }
+#endif
 
 static int gecko_isalive(void)
 {
@@ -120,22 +122,6 @@ static void gecko_flush(void)
 	while(_gecko_recvbyte(&tmp));
 }
 
-#if 0
-static int gecko_recvbuffer(void *buffer, u32 size)
-{
-	u32 left = size;
-	char *ptr = (char*)buffer;
-
-	while(left>0) {
-		if(!_gecko_recvbyte(ptr))
-			break;
-		ptr++;
-		left--;
-	}
-	return (size - left);
-}
-#endif
-
 #if !defined(NDEBUG) && !defined(GECKO_SAFE)
 static int gecko_sendbuffer(const void *buffer, u32 size)
 {
@@ -153,24 +139,6 @@ static int gecko_sendbuffer(const void *buffer, u32 size)
 		}
 		ptr++;
 		left--;
-	}
-	return (size - left);
-}
-#endif
-
-#if 0
-static int gecko_recvbuffer_safe(void *buffer, u32 size)
-{
-	u32 left = size;
-	char *ptr = (char*)buffer;
-	
-	while(left>0) {
-		if(_gecko_checkrecv()) {
-			if(!_gecko_recvbyte(ptr))
-				break;
-			ptr++;
-			left--;
-		}
 	}
 	return (size - left);
 }
@@ -251,6 +219,7 @@ int gecko_printf(const char *fmt, ...)
 }
 #endif
 
+#ifdef CAN_HAZ_GECKO_IN
 // irq context
 
 #define GECKO_STATE_NONE 0
@@ -269,7 +238,6 @@ static u32 _gecko_receive_left = 0;
 static u32 _gecko_receive_len = 0;
 static u8 *_gecko_receive_buffer = NULL;
 
-#ifdef CAN_HAZ_GECKO_IN
 void gecko_process(void) {
 	u8 b;
 
