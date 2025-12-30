@@ -59,7 +59,7 @@ extern const char git_version[];
 #define		IPC_CTRL_RESET	0x06
 
 const ipc_infohdr __ipc_info ALIGNED(32) MEM2_RODATA = {
-	.magic = "IPC",
+	.magic = { 'I', 'P', 'C' },
 	.version = 1,
 	.mem2_boundary = __mem2_area_start,
 	.ipc_in = in_queue,
