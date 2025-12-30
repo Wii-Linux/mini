@@ -114,7 +114,7 @@ u32 _main(void *base)
 	sdhc_init();
 
 	gecko_printf("Mounting SD...\n");
-	fres = f_mount(0, &fatfs);
+	fres = f_mount(&fatfs, "SD", 0);
 
 	if(fres != FR_OK) {
 		gecko_printf("Error %d while trying to mount SD\n", fres);

@@ -9,6 +9,7 @@ Copyright (C) 2008, 2009	Haxx Enterprises <bushing@gmail.com>
 # see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 */
 
+#include "ff.h"
 #include "diskio.h"
 #include "string.h"
 #include "sdmmc.h"
@@ -38,8 +39,8 @@ DSTATUS disk_status (BYTE drv) {
 }
 
 // Read Sector(s)
-DRESULT disk_read (BYTE drv, BYTE *buff, DWORD sector, BYTE count) {
-	int i;
+DRESULT disk_read (BYTE drv, BYTE *buff, LBA_t sector, UINT count) {
+	UINT i;
 	(void)drv;
 	for (i = 0; i < count; i++) {
 		if (sdmmc_read(sector+i, 1, buffer) != 0)
@@ -51,9 +52,9 @@ DRESULT disk_read (BYTE drv, BYTE *buff, DWORD sector, BYTE count) {
 }
 
 // Write Sector(s)
-#if _READONLY == 0
-DRESULT disk_write (BYTE drv, const BYTE *buff, DWORD sector, BYTE count) {
-	int i;
+#if FF_FS_READONLY == 0
+DRESULT disk_write (BYTE drv, const BYTE *buff, LBA_t sector, UINT count) {
+	UINT i;
 
 	for (i = 0; i < count; i++) {
 		memcpy(buffer, buff + i * 512, 512);
