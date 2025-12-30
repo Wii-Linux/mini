@@ -10,7 +10,7 @@ https://negix.net/trac/pdclib
 # see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 */
 
-#include "string.h"
+#include <string.h>
 
 size_t strlen(const char *s)
 {

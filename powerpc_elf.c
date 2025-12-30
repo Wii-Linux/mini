@@ -19,7 +19,7 @@ Copyright (C) 2009			Andre Heider "dhewg" <dhewg@wiibrew.org>
 #include "powerpc_elf.h"
 #include "elf.h"
 #include "memory.h"
-#include "string.h"
+#include <string.h>
 
 extern u8 __mem2_area_start[];
 

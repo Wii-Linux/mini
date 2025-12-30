@@ -11,12 +11,12 @@ Copyright (C) 2009		John Kelley <wiidev@kelley.ca>
 # see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 */
 
+#include <string.h>
 #include "types.h"
 #include "utils.h"
 #include "start.h"
 #include "hollywood.h"
 #include "sdhc.h"
-#include "string.h"
 #include "memory.h"
 #include "gecko.h"
 #include "ff.h"

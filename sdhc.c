@@ -24,7 +24,7 @@
 #include "sdmmc.h"
 #include "sdhc.h"
 #include "gecko.h"
-#include "string.h"
+#include <string.h>
 #include "memory.h"
 #include "utils.h"
 

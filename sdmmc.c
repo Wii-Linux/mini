@@ -11,7 +11,7 @@ Copyright (C) 2008, 2009	Sven Peter <svenpeter@gmail.com>
 #include "bsdtypes.h"
 #include "sdhc.h"
 #include "gecko.h"
-#include "string.h"
+#include <string.h>
 #include "utils.h"
 #include "memory.h"
 

@@ -13,7 +13,7 @@ Copyright (C) 2009		John Kelley <wiidev@kelley.ca>
 */
 
 #include <stdarg.h>
-#include "string.h"
+#include <string.h>
 #include "types.h"
 #include "irq.h"
 #include "memory.h"

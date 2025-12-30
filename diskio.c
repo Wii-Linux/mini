@@ -11,7 +11,7 @@ Copyright (C) 2008, 2009	Haxx Enterprises <bushing@gmail.com>
 
 #include "ff.h"
 #include "diskio.h"
-#include "string.h"
+#include <string.h>
 #include "sdmmc.h"
 
 #ifndef MEM2_BSS

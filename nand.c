@@ -13,7 +13,7 @@ Copyright (C) 2008, 2009	Hector Martin "marcan" <marcan@marcansoft.com>
 #include "hollywood.h"
 #include "nand.h"
 #include "utils.h"
-#include "string.h"
+#include <string.h>
 #include "start.h"
 #include "memory.h"
 #include "crypto.h"

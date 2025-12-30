@@ -16,7 +16,7 @@ Copyright (C) 2010			Alex Marshall <trap15@raidenii.net>
 #include "powerpc_elf.h"
 #include "hollywood.h"
 #include "utils.h"
-#include "string.h"
+#include <string.h>
 #include "start.h"
 #include "gecko.h"
 

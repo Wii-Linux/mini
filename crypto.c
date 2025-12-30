@@ -16,7 +16,7 @@ Copyright (C) 2008, 2009	Sven Peter <svenpeter@gmail.com>
 #include "irq.h"
 #include "ipc.h"
 #include "gecko.h"
-#include "string.h"
+#include <string.h>
 #include "seeprom.h"
 
 #define		AES_CMD_RESET	0

@@ -15,7 +15,7 @@ Copyright (C) 2009		Andre Heider "dhewg" <dhewg@wiibrew.org>
 #include "nand.h"
 #include "memory.h"
 #include "crypto.h"
-#include "string.h"
+#include <string.h>
 #include "gecko.h"
 #include "powerpc.h"
 #include "utils.h"

@@ -16,7 +16,7 @@ Copyright (C) 2009		Andre Heider "dhewg" <dhewg@wiibrew.org>
 #include "irq.h"
 #include "start.h"
 #include "vsprintf.h"
-#include "string.h"
+#include <string.h>
 #include "utils.h"
 #include "hollywood.h"
 #include "elf.h"
