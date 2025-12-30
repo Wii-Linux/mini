@@ -40,8 +40,11 @@ Copyright (C) 2009		John Kelley <wiidev@kelley.ca>
 // 'MBTM' - Memory BooT Magic
 #define MEMBOOT_MAGIC 0x4D42544D
 
+// 'NRST' - No ReSeT (of Broadway)
+#define NO_RESET_MAGIC 0x4E525354
+
 // pointer to magic
-#define MEMBOOT_MAGIC_PTR  (*(u32 *)0xFFFFF0)
+#define BOOT_MAGIC_PTR  (*(u32 *)0xFFFFF0)
 
 // size, set by Broadway on load
 #define MEMBOOT_SIZE_PTR   (*(u32 *)0xFFFFF4)
@@ -105,9 +108,13 @@ u32 _main(void *base)
 		goto shutdown;
 	}
 
-	if (MEMBOOT_MAGIC_PTR == MEMBOOT_MAGIC) {
+	if (BOOT_MAGIC_PTR == MEMBOOT_MAGIC) {
 		gecko_printf("Detected memboot magic, skipping SD init\n");
 		goto memboot;
+	}
+	else if (BOOT_MAGIC_PTR == NO_RESET_MAGIC) {
+		gecko_printf("Detected no-reset magic, not resetting Broadway\n");
+		goto success;
 	}
 
 	gecko_printf("Initializing SDHC...\n");
