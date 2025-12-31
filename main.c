@@ -108,6 +108,9 @@ u32 _main(void *base)
 		goto shutdown;
 	}
 
+	gecko_printf("Initializing SDHC...\n");
+	sdhc_init();
+
 	if (BOOT_MAGIC_PTR == MEMBOOT_MAGIC) {
 		gecko_printf("Detected memboot magic, skipping SD init\n");
 		goto memboot;
@@ -116,9 +119,6 @@ u32 _main(void *base)
 		gecko_printf("Detected no-reset magic, not resetting Broadway\n");
 		goto success;
 	}
-
-	gecko_printf("Initializing SDHC...\n");
-	sdhc_init();
 
 	gecko_printf("Mounting SD...\n");
 	fres = f_mount(&fatfs, "SD", 0);
