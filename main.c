@@ -75,6 +75,10 @@ u32 _main(void *base)
 	exception_initialize();
 	gecko_printf("Configuring caches and MMU...\n");
 	mem_initialize();
+	gecko_printf("Ensuring hardware is really unlocked...\n");
+	write32(HW_AHBPROT, 0xffffffff);
+	set32(HW_MEMMIRR, 0x8); /* SRNPROT */
+	mem_protect(0, NULL, NULL);
 
 	gecko_printf("IOSflags: %08x %08x %08x\n",
 		read32(0xffffff00), read32(0xffffff04), read32(0xffffff08));
