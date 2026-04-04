@@ -112,17 +112,22 @@ u32 _main(void *base)
 		goto shutdown;
 	}
 
-	gecko_printf("Initializing SDHC...\n");
-	sdhc_init();
-
-	if (BOOT_MAGIC_PTR == MEMBOOT_MAGIC) {
+#ifdef FOR_NPLL
+	if (BOOT_MAGIC_PTR == NO_RESET_MAGIC) {
+#else
+	else if (BOOT_MAGIC_PTR == MEMBOOT_MAGIC) {
 		gecko_printf("Detected memboot magic, skipping SD init\n");
 		goto memboot;
 	}
 	else if (BOOT_MAGIC_PTR == NO_RESET_MAGIC) {
+#endif
 		gecko_printf("Detected no-reset magic, not resetting Broadway\n");
 		goto success;
 	}
+
+#ifndef FOR_NPLL
+	gecko_printf("Initializing SDHC...\n");
+	sdhc_init();
 
 	gecko_printf("Mounting SD...\n");
 	fres = f_mount(&fatfs, "SD", 0);
@@ -163,7 +168,7 @@ memboot:
 	gecko_printf("All boot options failed... booting System Menu\n");
 	vector = boot2_run(1, 2);
 	goto shutdown;
-
+#endif
 success:
 	gecko_printf("Boot success - going into IPC mainloop...\n");
 	vector = ipc_process_slow();

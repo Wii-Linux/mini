@@ -15,10 +15,12 @@ Copyright (C) 2008, 2009	Sven Peter <svenpeter@gmail.com>
 #include "utils.h"
 #include "memory.h"
 
-//#define SDMMC_DEBUG
+#ifdef FOR_NPLL
+#define SDMMC_DEBUG
+#endif
 
 #ifdef SDMMC_DEBUG
-static int sdmmcdebug = 0;
+static int sdmmcdebug = 9;
 #define DPRINTF(n,s)	do { if ((n) <= sdmmcdebug) gecko_printf s; } while (0)
 #else
 #define DPRINTF(n,s)	do {} while(0)

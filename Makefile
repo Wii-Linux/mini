@@ -10,6 +10,9 @@ CFLAGS += -DCAN_HAZ_USBGECKO
 CFLAGS += -DGECKO_LFCR
 # uses the 'safe' version of the usbgecko receive and send functions
 #CFLAGS += -DGECKO_SAFE
+ifeq ($(FOR_NPLL),1)
+CFLAGS += -DFOR_NPLL
+endif
 
 ASFLAGS += -D_LANGUAGE_ASSEMBLY
 CFLAGS += -DCAN_HAZ_IRQ
