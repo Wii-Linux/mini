@@ -30,11 +30,13 @@ Copyright (C) 2009		John Kelley <wiidev@kelley.ca>
 #include "boot2.h"
 #include "git_version.h"
 
-// (1st choice, neagix's PPC-side boot menu)
+// (1st choice, Wii-Linux NPLL)
+#define NPLL_ELF_FILE        "/npll.elf"
+// (2nd choice, neagix's PPC-side boot menu)
 #define GUMBOOT_ELF_FILE     "/gumboot/gumboot.elf"
-// (2nd choice, BootMii GUI (neagix's default path))
+// (3rd choice, BootMii GUI (neagix's default path))
 #define BOOTMII_GUI_ELF_FILE "/bootmii/gui.elf"
-// (3rd choice, BootMii GUI (official BootMii path))
+// (4th choice, BootMii GUI (official BootMii path))
 #define PPCBOOT_ELF_FILE     "/bootmii/ppcboot.elf"
 
 // 'MBTM' - Memory BooT Magic
@@ -125,7 +127,6 @@ u32 _main(void *base)
 		goto success;
 	}
 
-#ifndef FOR_NPLL
 	gecko_printf("Initializing SDHC...\n");
 	sdhc_init();
 
@@ -137,6 +138,12 @@ u32 _main(void *base)
 		panic2(0, PANIC_MOUNT);
 	}
 
+	gecko_printf("Trying to boot: " NPLL_ELF_FILE "\n");
+	res = powerpc_boot_file(NPLL_ELF_FILE);
+	if (!res)
+		goto success;
+
+	gecko_printf("Failed to boot PPC " NPLL_ELF_FILE ": %d\n", res);
 	gecko_printf("Trying to boot: " GUMBOOT_ELF_FILE "\n");
 	res = powerpc_boot_file(GUMBOOT_ELF_FILE);
 	if (!res)
@@ -168,7 +175,7 @@ memboot:
 	gecko_printf("All boot options failed... booting System Menu\n");
 	vector = boot2_run(1, 2);
 	goto shutdown;
-#endif
+
 success:
 	gecko_printf("Boot success - going into IPC mainloop...\n");
 	vector = ipc_process_slow();

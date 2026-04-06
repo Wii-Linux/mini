@@ -20,10 +20,6 @@
  * Simplified Specification Version 1.00 (www.sdcard.com).
  */
 
-#ifdef FOR_NPLL
-#undef CAN_HAZ_IRQ
-#endif
-
 #include "bsdtypes.h"
 #include "sdmmc.h"
 #include "sdhc.h"
@@ -42,9 +38,7 @@
 
 struct sdhc_host sc_host;
 
-#ifdef FOR_NPLL
-#define SDHC_DEBUG
-#endif
+//#define SDHC_DEBUG
 
 #define SDHC_COMMAND_TIMEOUT	500
 #define SDHC_TRANSFER_TIMEOUT	5000

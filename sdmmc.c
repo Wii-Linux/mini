@@ -15,9 +15,7 @@ Copyright (C) 2008, 2009	Sven Peter <svenpeter@gmail.com>
 #include "utils.h"
 #include "memory.h"
 
-#ifdef FOR_NPLL
-#define SDMMC_DEBUG
-#endif
+//#define SDMMC_DEBUG
 
 #ifdef SDMMC_DEBUG
 static int sdmmcdebug = 9;
