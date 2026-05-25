@@ -36,6 +36,7 @@
 #include "ipc.h"
 #endif
 
+static int sdhc_initialized = 0;
 struct sdhc_host sc_host;
 
 //#define SDHC_DEBUG
@@ -849,6 +850,7 @@ void sdhc_init(void)
 #ifdef CAN_HAZ_IRQ
 	irq_enable(IRQ_SDHC);
 #endif
+	sdhc_initialized = 1;
 	sdhc_host_found(0, SDHC_REG_BASE, 1);
 }
 
@@ -857,7 +859,8 @@ void sdhc_exit(void)
 #ifdef CAN_HAZ_IRQ
        irq_disable(IRQ_SDHC);
 #endif
-       sdhc_shutdown();
+       if (sdhc_initialized)
+	       sdhc_shutdown();
 }
 
 #ifdef CAN_HAZ_IPC
@@ -865,7 +868,10 @@ void sdhc_ipc(volatile ipc_request *req)
 {
 	switch (req->req) {
 	case IPC_SDHC_DISCOVER:
-	sdmmc_needs_discover();
+		if (!sdhc_initialized)
+			sdhc_init();
+
+		sdmmc_needs_discover();
 		break;
 	case IPC_SDHC_EXIT:
 		sdhc_exit();
