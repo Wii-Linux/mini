@@ -29,7 +29,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 .extern __stack_addr
 .extern delay
 .globl _start
+.type _start, %function
 .globl debug_output
+.type debug_output, %function
 
 .section .init
 
@@ -110,4 +112,5 @@ debug_output:
 	orr	r2, r2, r0, LSL #16
 	@ store back
 	str	r2, [r3, #0xe0]
-	mov	pc, lr
+	bx	lr
+.size debug_output, . - debug_output

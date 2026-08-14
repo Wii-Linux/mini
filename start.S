@@ -19,7 +19,9 @@ Copyright (C) 2008, 2009	Hector Martin "marcan" <marcan@marcansoft.com>
 .extern __bss2_end
 .extern __stack_addr
 .globl _start
+.type _start, %function
 .globl debug_output
+.type debug_output, %function
 
 .extern v_undf
 .extern v_swi
@@ -127,6 +129,7 @@ debug_output:
 	@ store back
 	str	r2, [r3, #0xe0]
 	bx	lr
+.size debug_output, . - debug_output
 
 .pool
 

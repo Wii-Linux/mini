@@ -8,14 +8,23 @@ Copyright (C) 2008, 2009	Hector Martin "marcan" <marcan@marcansoft.com>
 # see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 */
 
+.arm
+
 .globl v_undf
+.type v_undf, %function
 .globl v_swi
+.type v_swi, %function
 .globl v_instr_abrt
+.type v_instr_abrt, %function
 .globl v_data_abrt
+.type v_data_abrt, %function
 .globl v_reserved
+.type v_reserved, %function
 .globl v_fiq
+.type v_fiq, %function
 
 .globl exc_setup_stack
+.type exc_setup_stack, %function
 .extern __excstack_addr
 .extern exc_handler
 
@@ -45,6 +54,7 @@ exc_setup_stack:
 	@ Restore mode
 	msr cpsr_c, r0
 	bx	lr
+.size exc_setup_stack, . - exc_setup_stack
 
 .pool
 
@@ -62,6 +72,7 @@ v_undf:
 	add		sp, sp, #8
 	ldmfd	sp!, {lr}
 	movs	pc, lr
+.size v_undf, . - v_undf
 
 v_swi:
 	stmfd	sp!, {lr}
@@ -77,6 +88,7 @@ v_swi:
 	add		sp, sp, #8
 	ldmfd	sp!, {lr}
 	movs	pc, lr
+.size v_swi, . - v_swi
 
 v_instr_abrt:
 	stmfd	sp!, {lr}
@@ -92,6 +104,7 @@ v_instr_abrt:
 	add		sp, sp, #8
 	ldmfd	sp!, {lr}
 	subs	pc, lr, #4
+.size v_instr_abrt, . - v_instr_abrt
 
 v_data_abrt:
 	stmfd	sp!, {lr}
@@ -107,6 +120,7 @@ v_data_abrt:
 	add		sp, sp, #8
 	ldmfd	sp!, {lr}
 	subs	pc, lr, #8
+.size v_data_abrt, . - v_data_abrt
 
 v_reserved:
 	stmfd	sp!, {lr}
@@ -122,6 +136,7 @@ v_reserved:
 	add		sp, sp, #8
 	ldmfd	sp!, {lr}
 	movs	pc, lr
+.size v_reserved, . - v_reserved
 
 v_fiq:
 	stmfd	sp!, {lr}
@@ -137,4 +152,5 @@ v_fiq:
 	add		sp, sp, #8
 	ldmfd	sp!, {lr}
 	subs	pc, lr, #4
+.size v_fiq, . - v_fiq
 

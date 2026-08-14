@@ -11,11 +11,17 @@ Copyright (C) 2008, 2009	Hector Martin "marcan" <marcan@marcansoft.com>
 .arm
 
 .globl memcpy32
+.type memcpy32, %function
 .globl memcpy16
+.type memcpy16, %function
 .globl memcpy8
+.type memcpy8, %function
 .globl memset32
+.type memset32, %function
 .globl memset16
+.type memset16, %function
 .globl memset8
+.type memset8, %function
 
 .text
 
@@ -27,6 +33,7 @@ memcpy32:
 	subs	r2, #4
 	bne		1b
 	bx		lr
+.size memcpy32, . - memcpy32
 
 memset32:
 	bics	r2, #3
@@ -35,6 +42,7 @@ memset32:
 	subs	r2, #4
 	bne		1b
 	bx		lr
+.size memset32, . - memset32
 
 memcpy16:
 	bics	r2, #1
@@ -44,6 +52,7 @@ memcpy16:
 	subs	r2, #2
 	bne		1b
 	bx		lr
+.size memcpy16, . - memcpy16
 
 memset16:
 	bics	r2, #1
@@ -52,6 +61,7 @@ memset16:
 	subs	r2, #2
 	bne		1b
 	bx		lr
+.size memset16, . - memset16
 
 memcpy8:
 	cmp		r2, #0
@@ -61,6 +71,7 @@ memcpy8:
 	subs	r2, #1
 	bne		1b
 	bx		lr
+.size memcpy8, . - memcpy8
 
 memset8:
 	cmp		r2, #0
@@ -69,4 +80,5 @@ memset8:
 	subs	r2, #1
 	bne		1b
 	bx		lr
+.size memset8, . - memset8
 
