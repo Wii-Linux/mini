@@ -37,10 +37,12 @@ Copyright (C) 2008, 2009	John Kelley <wiidev@kelley.ca>
 #define		HW_MEMMIRR		(HW_REG_BASE + 0x060)
 #define		HW_AHBPROT		(HW_REG_BASE + 0x064)
 
-// something to do with PPCBOOT
-// and legacy DI it seems ?!?
-#define		HW_EXICTRL		(HW_REG_BASE + 0x070)
-#define		EXICTRL_ENABLE_EXI	1
+#define		HW_AIPPROT		(HW_REG_BASE + 0x070)
+// ENAHBIOPI=1 -> Legacy blocks (EXI, SI, DI) on AHB, Starlet can access them.
+// ENAHBIOPI=0 -> Legacy blocks (EXI, SI, DI) in legacy Flipper address space,
+// Starlet cannot access them, Broadway can.  Must be 0 for Broadway to read
+// EXI boot registers.
+#define		AIPPROT_ENAHBIOPI	1
 
 // PPC side of GPIO1 (Starlet can access this too)
 // Output state

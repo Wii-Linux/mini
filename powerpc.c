@@ -24,7 +24,7 @@ void powerpc_upload_stub(u32 entry)
 {
 	u32 i;
 
-	set32(HW_EXICTRL, EXICTRL_ENABLE_EXI);
+	set32(HW_AIPPROT, AIPPROT_ENAHBIOPI);
 
 	// lis r3, entry@h
 	write32(EXI_BOOT_BASE + 4 * 0, 0x3c600000 | entry >> 16);
@@ -44,9 +44,6 @@ void powerpc_upload_stub(u32 entry)
 
 	set32(HW_DIFLAGS, DIFLAGS_BOOT_CODE);
 	set32(HW_AHBPROT, 0xFFFFFFFF);
-
-	gecko_printf("disabling EXI now...\n");
-	clear32(HW_EXICTRL, EXICTRL_ENABLE_EXI);
 }
 
 void powerpc_hang(void)
@@ -59,6 +56,9 @@ void powerpc_hang(void)
 
 void powerpc_reset(void)
 {
+	gecko_printf("disabling ENAHBIOPI now...\n");
+	clear32(HW_AIPPROT, AIPPROT_ENAHBIOPI);
+
 	// enable the broadway IPC interrupt
 	write32(HW_PPCIRQMASK, (1<<30));
 	clear32(HW_RESETS, 0x30);
@@ -67,7 +67,7 @@ void powerpc_reset(void)
 	udelay(100);
 	set32(HW_RESETS, 0x10);
 	udelay(100000);
-	set32(HW_EXICTRL, EXICTRL_ENABLE_EXI);
+	set32(HW_AIPPROT, AIPPROT_ENAHBIOPI);
 }
 
 void powerpc_ipc(volatile ipc_request *req)

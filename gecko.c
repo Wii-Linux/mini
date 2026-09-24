@@ -30,6 +30,10 @@ static u8 gecko_console_enabled = 0;
 static u32 _gecko_command(u32 command)
 {
 	u32 i;
+
+	if ((read32(HW_AIPPROT) & AIPPROT_ENAHBIOPI) == 0) // we can't access EXI right now
+		return 0;
+
 	// Memory Card Port B (Channel 1, Device 0, Frequency 3 (32Mhz Clock))
 	write32(EXI1_CSR, 0xd0);
 	write32(EXI1_DATA, command);
@@ -42,17 +46,7 @@ static u32 _gecko_command(u32 command)
 
 static u32 _gecko_getid(void)
 {
-	u32 i;
-	// Memory Card Port B (Channel 1, Device 0, Frequency 3 (32Mhz Clock))
-	write32(EXI1_CSR, 0xd0);
-	write32(EXI1_DATA, 0);
-	write32(EXI1_CR, 0x19);
-	while (read32(EXI1_CR) & 1);
-	write32(EXI1_CR, 0x39);
-	while (read32(EXI1_CR) & 1);
-	i = read32(EXI1_DATA);
-	write32(EXI1_CSR, 0);
-	return i;
+	return _gecko_command(0);
 }
 
 #ifndef NDEBUG
@@ -128,6 +122,9 @@ static int gecko_sendbuffer(const void *buffer, u32 size)
 	u32 left = size;
 	char *ptr = (char*)buffer;
 
+	if ((read32(HW_AIPPROT) & AIPPROT_ENAHBIOPI) == 0) // we can't access EXI right now
+		return 0;
+
 	while(left>0) {
 		if(!_gecko_sendbyte(*ptr))
 			break;
@@ -150,9 +147,9 @@ static int gecko_sendbuffer_safe(const void *buffer, u32 size)
 	u32 left = size;
 	char *ptr = (char*)buffer;
 
-	if((read32(HW_EXICTRL) & EXICTRL_ENABLE_EXI) == 0)
-		return left;
-	
+	if ((read32(HW_AIPPROT) & AIPPROT_ENAHBIOPI) == 0) // we can't access EXI right now
+		return 0;
+
 	while(left>0) {
 		if(_gecko_checksend()) {
 			if(!_gecko_sendbyte(*ptr))
