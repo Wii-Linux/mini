@@ -11,7 +11,7 @@ CFLAGS += -DGECKO_LFCR
 # uses the 'safe' version of the usbgecko receive and send functions
 #CFLAGS += -DGECKO_SAFE
 ifeq ($(FOR_NPLL),1)
-CFLAGS += -DFOR_NPLL
+CFLAGS += -DFOR_NPLL -DNDEBUG
 endif
 
 ASFLAGS += -D_LANGUAGE_ASSEMBLY
