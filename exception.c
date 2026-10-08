@@ -56,6 +56,10 @@ void exception_initialize(void)
 void exc_handler(u32 type, u32 spsr, u32 *regs)
 {
 	(void) spsr;
+#ifdef NDEBUG
+	(void)type;
+	(void)regs;
+#else
 
 	if (type > 8) type = 8;
 	gecko_printf("\nException %d (%s):\n", type, exceptions[type]);
@@ -111,6 +115,7 @@ void exc_handler(u32 type, u32 spsr, u32 *regs)
 		gecko_printf("%08x: *%08x %08x %08x %08x\n", pc, read32(pc), read32(pc+4), read32(pc+8), read32(pc+12));
 		gecko_printf("%08x:  %08x %08x %08x %08x\n", pc+16, read32(pc+16), read32(pc+20), read32(pc+24), read32(pc+28));
 	}
+#endif
 	panic2(0, PANIC_EXCEPTION);
 }
 

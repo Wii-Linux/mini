@@ -225,6 +225,9 @@ void sdmmc_needs_discover(void)
 		unsigned int taac, nsac, read_bl_len, c_size, c_size_mult;
 		taac = resp[13];
 		nsac = resp[12];
+#ifdef NDEBUG
+		(void)nsac;
+#endif
 		read_bl_len = resp[9] & 0xF;
 		
 		c_size = (resp[8] & 3) << 10;

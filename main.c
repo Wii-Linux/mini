@@ -163,7 +163,9 @@ u32 _main(void *base)
 
 	gecko_printf("Failed to boot PPC " PPCBOOT_ELF_FILE ": %d\n", res);
 
+#ifndef FOR_NPLL
 memboot:
+#endif
 	// try to memboot, even we don't have the magic, just in case
 	// (it almost certainly won't work, but never know...)
 	gecko_printf("Trying to memboot: %p (%d bytes)\n", MEMBOOT_ELF_ADDR, MEMBOOT_SIZE_PTR);
