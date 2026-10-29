@@ -76,9 +76,9 @@ void irq_handler(void)
 		write32(HW_GPIO1INTFLAG, 0xFFFFFF); // shut it up
 		write32(HW_ARMIRQFLAG, IRQF_GPIO1);
 	}
-	if(flags & IRQF_RESET) {
-//		gecko_printf("IRQ: RESET\n");
-		write32(HW_ARMIRQFLAG, IRQF_RESET);
+	if(flags & IRQF_RSW) {
+//		gecko_printf("IRQ: RSW\n");
+		write32(HW_ARMIRQFLAG, IRQF_RSW);
 	}
 	if(flags & IRQF_IPC) {
 		//gecko_printf("IRQ: IPC\n");
@@ -93,6 +93,11 @@ void irq_handler(void)
 //		gecko_printf("IRQ: SDHC\n");
 		write32(HW_ARMIRQFLAG, IRQF_SDHC);
 		sdhc_irq();
+	}
+	if (flags & IRQF_PIRST) {
+		gecko_printf("IRQ: PPC triggered PI reset\n");
+		write32(HW_ARMIRQFLAG, IRQF_PIRST);
+		clear32(HW_RESETS, HW_RESETS_RSTBINB);
 	}
 	
 	flags &= ~IRQF_ALL;

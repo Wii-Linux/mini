@@ -91,8 +91,9 @@ u32 _main(void *base)
 	irq_initialize();
 //	irq_enable(IRQ_GPIO1B);
 	irq_enable(IRQ_GPIO1);
-	irq_enable(IRQ_RESET);
+	irq_enable(IRQ_RSW);
 	irq_enable(IRQ_TIMER);
+	irq_enable(IRQ_PIRST);
 	irq_set_alarm(20, 1);
 	gecko_printf("Interrupts initialized\n");
 #endif

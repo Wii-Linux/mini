@@ -89,8 +89,8 @@ Copyright (C) 2008, 2009	John Kelley <wiidev@kelley.ca>
 #define		HW_DIFLAGS		(HW_REG_BASE + 0x180)
 #define		DIFLAGS_BOOT_CODE	0x100000
 
-// maybe a GPIO???
 #define		HW_RESETS		(HW_REG_BASE + 0x194)
+#define		HW_RESETS_RSTBINB	0x1
 
 #define		HW_CLOCKS		(HW_REG_BASE + 0x1b4)
 

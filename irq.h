@@ -24,22 +24,36 @@ Copyright (C) 2008, 2009	Sven Peter <svenpeter@gmail.com>
 #define IRQ_WIFI	8
 #define IRQ_GPIO1B	10
 #define IRQ_GPIO1	11
-#define IRQ_RESET	17
+#define IRQ_PIRST	15
+#define IRQ_RSW		17
+#define IRQ_DI		18
+#define IRQ_SI		19
+#define IRQ_EXI		20
 #define IRQ_PPCIPC	30
 #define IRQ_IPC		31
 
 #define IRQF_TIMER	(1<<IRQ_TIMER)
 #define IRQF_NAND	(1<<IRQ_NAND)
 #define IRQF_AES	(1<<IRQ_AES)
+#define IRQF_SHA1	(1<<IRQ_SHA1)
+#define IRQF_EHCI	(1<<IRQ_EHCI)
+#define IRQF_OHCI0	(1<<IRQ_OHCI0)
+#define IRQF_OHCI1	(1<<IRQ_OHCI1)
 #define IRQF_SDHC	(1<<IRQ_SDHC)
+#define IRQF_WIFI	(1<<IRQ_WIFI)
 #define IRQF_GPIO1B	(1<<IRQ_GPIO1B)
 #define IRQF_GPIO1	(1<<IRQ_GPIO1)
-#define IRQF_RESET	(1<<IRQ_RESET)
+#define IRQF_PIRST	(1<<IRQ_PIRST)
+#define IRQF_RSW	(1<<IRQ_RSW)
+#define IRQF_DI		(1<<IRQ_DI)
+#define IRQF_SI		(1<<IRQ_SI)
+#define IRQF_EXI	(1<<IRQ_EXI)
+#define IRQF_PPCIPC	(1<<IRQ_PPCIPC)
 #define IRQF_IPC	(1<<IRQ_IPC)
 
 #define IRQF_ALL	( \
 	IRQF_TIMER|IRQF_NAND|IRQF_GPIO1B|IRQF_GPIO1| \
-	IRQF_RESET|IRQF_IPC|IRQF_AES|IRQF_SDHC \
+	IRQF_RSW|IRQF_IPC|IRQF_AES|IRQF_SDHC|IRQF_PIRST \
 	)
 
 #define CPSR_IRQDIS 0x80
